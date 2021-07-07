@@ -31,6 +31,7 @@ public class BalanceRepository {
      * The idea of reconciliation is when we  add an EDGE from U1 to U2
      * We need to make sure that there's no existing edge from U2 to U1 with a lesser weight
      * If it exists, then we re-adjust based on the weight of the graph
+     *
      * @param dueOwedTo
      * @param dueOwedBy
      * @param amount
@@ -40,5 +41,16 @@ public class BalanceRepository {
         final Map<User, BigDecimal> userDueMap = this.balanceMap.getOrDefault(dueOwedBy, new HashMap<>());
         userDueMap.put(dueOwedTo, userDueMap.getOrDefault(dueOwedTo, BigDecimal.ZERO).add(amount));
         this.balanceMap.put(dueOwedBy, userDueMap);
+    }
+
+    public BigDecimal getBalanceOwedBy(User by, User to) {
+        BigDecimal balance = BigDecimal.ZERO;
+        if (!this.balanceMap.containsKey(by) || !this.balanceMap.get(by).containsKey(to)) return balance;
+        return this.balanceMap.get(by).get(to);
+    }
+
+    public void updateDues(User from, User to, BigDecimal newAmount) {
+        final Map<User, BigDecimal> userDueMap = this.balanceMap.get(from);
+        userDueMap.put(to, newAmount);
     }
 }
