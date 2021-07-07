@@ -49,8 +49,13 @@ public class BalanceRepository {
         return this.balanceMap.get(by).get(to);
     }
 
-    public void updateDues(User from, User to, BigDecimal newAmount) {
+    public void removeDues(User from, User to) {
         final Map<User, BigDecimal> userDueMap = this.balanceMap.get(from);
-        userDueMap.put(to, newAmount);
+        userDueMap.put(to, BigDecimal.ZERO);
+    }
+
+    public void addDue(User from, User to, BigDecimal amount) {
+        final Map<User, BigDecimal> userDueMap = this.balanceMap.get(from);
+        userDueMap.put(to, userDueMap.getOrDefault(to, BigDecimal.ZERO).add(amount));
     }
 }

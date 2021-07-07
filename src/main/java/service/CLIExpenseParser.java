@@ -42,7 +42,7 @@ public class CLIExpenseParser implements ExpenseParser {
         if (splitType == ExpenseSplitType.EXACT) {
             for (int i = 1; i <= totalUserInTxn; i++) {
                 BigDecimal amtDue = new BigDecimal(expenseInfo[fromIndex++]);
-                expenseDueDetails.add(new ExpenseDueDetails(expenseAddedBy, participants.get(i - 1), amtDue));
+                expenseDueDetails.add(new ExpenseDueDetails(participants.get(i - 1), expenseAddedBy, amtDue));
             }
         } else if (splitType == ExpenseSplitType.PERCENT) {
             for (int i = 1; i <= totalUserInTxn; i++) {
@@ -51,7 +51,7 @@ public class CLIExpenseParser implements ExpenseParser {
                 double multiplicand = percentage / 100.0;
                 BigDecimal amtDue = totalAmount.multiply(new BigDecimal(multiplicand));
 
-                expenseDueDetails.add(new ExpenseDueDetails(expenseAddedBy, participants.get(i - 1), amtDue));
+                expenseDueDetails.add(new ExpenseDueDetails(participants.get(i - 1), expenseAddedBy, amtDue));
             }
         } else if (splitType == ExpenseSplitType.EQUAL) {
             BigDecimal amtDue = totalAmount.divide(BigDecimal.valueOf(totalUserInTxn), RoundingMode.HALF_UP);
